@@ -1,0 +1,21 @@
+{
+    "name": "Rick and Morty Characters",
+    "short_name": "Rick and Morty Characters",
+    "icons": [
+      {
+        "src": "icon.png",
+        "sizes": "227x222",
+        "type": "image/png"
+      },
+      {
+        "src": "sicon.jpg",
+        "sizes": "225x225",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#FFF6E9",
+    "theme_color": "#FFF6E9",
+    "id": "/index.html"
+  }

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rick and Morty Characters</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .character-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            margin: 20px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .character-card:hover {
+            transform: translateY(-5px);
+        }
+        .character-image {
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+        }
+        .character-image:hover {
+            transform: scale(1.02);
+        }
+        .character-info {
+            margin-top: 25px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #00b0c8;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        p {
+            font-size: 1.1em;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+        p:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        strong {
+            color: #00b0c8;
+            margin-right: 10px;
+        }
+        #loading {
+            font-size: 1.2em;
+            color: #00b0c8;
+            text-align: center;
+        }
+        .characters-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="characters-container">
+        <div id="rick-container" class="character-card">
+            <h1>Rick Sanchez Info</h1>
+            <div id="loading-rick">Loading...</div>
+        </div>
+        <div id="morty-container" class="character-card">
+            <h1>Morty Smith Info</h1>
+            <div id="loading-morty">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCharacters();
+        });
+
+        async function fetchCharacters() {
+            try {
+                const rickResponse = await fetch('https://rickandmortyapi.com/api/character/1');
+                const mortyResponse = await fetch('https://rickandmortyapi.com/api/character/2');
+                
+                const rickData = await rickResponse.json();
+                const mortyData = await mortyResponse.json();
+                
+                displayCharacter(rickData, 'rick-container');
+                displayCharacter(mortyData, 'morty-container');
+            } catch (error) {
+                console.error('Error fetching characters:', error);
+                document.getElementById('loading-rick').textContent = 'Error loading character data';
+                document.getElementById('loading-morty').textContent = 'Error loading character data';
+            }
+        }
+
+        function displayCharacter(character, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <h1>${character.name}</h1>
+                <img src="${character.image}" alt="${character.name}" class="character-image">
+                <div class="character-info">
+                    <p><strong>Status:</strong> ${character.status}</p>
+                    <p><strong>Species:</strong> ${character.species}</p>
+                    <p><strong>Gender:</strong> ${character.gender}</p>
+                    <p><strong>Origin:</strong> ${character.origin.name}</p>
+                    <p><strong>Location:</strong> ${character.location.name}</p>
+                </div>
+            `;
+        }
+    </script>
+    <script src="sw.js"></script>
+</body>
+</html>
